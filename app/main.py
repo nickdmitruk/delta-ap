@@ -1,5 +1,6 @@
 import sys
 import os
+st.set_page_config(page_title="DELTA A.P.", layout="wide")
 sys.path.append(os.path.abspath("app"))
 
 import streamlit as st
