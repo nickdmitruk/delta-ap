@@ -17,55 +17,62 @@ def show():
 
     st.markdown(f"""
         <style>
-        html, body, [data-testid="stApp"] {{
-            margin: 0 !important;
-            padding: 0 !important;
-            height: 100vh !important;
-            width: 100vw !important;
-            overflow: hidden !important;
-        }}
-        section.main {{
-            padding-top: 0rem !important;
-            padding-bottom: 0rem !important;
-        }}
-        .block-container {{
-            padding: 0rem !important;
+        html, body, [data-testid="stApp"], .main, .block-container {{
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            font-family: 'Gotham', sans-serif;
         }}
         .full-page {{
             display: flex;
             height: 100vh;
             width: 100vw;
+            background-color: #262626;
         }}
         .login-left {{
-            flex: 1;
+            width: 60%;
+            height: calc(100vh - 100px);
+            margin: 35px 0 35px 35px;
+            border-radius: 24px;
             background-image: url("data:image/jpg;base64,{bg_image}");
             background-size: cover;
             background-position: center;
             position: relative;
+            overflow: hidden;
         }}
-        .login-left img {{
+        .login-left img.logo {{
             position: absolute;
-            top: 2rem;
-            left: 2rem;
+            top: 30px;
+            left: 30px;
             width: 120px;
         }}
         .login-right {{
             flex: 1;
-            background-color: #1c1c1c;
+            background-color: #262626;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            align-items: center;
             padding: 2rem;
         }}
         .login-box {{
             width: 100%;
             max-width: 400px;
             color: white;
+            text-align: left;
+            margin: 0 auto;
         }}
         .login-box h1 {{
             font-size: 2rem;
-            margin-bottom: 1rem;
+            font-weight: 500;
+            margin: 0.25rem 0;
+        }}
+        .login-box p {{
+            font-weight: 300;
+            font-size: 0.95rem;
+            color: #868686;
+            margin: 0 0 1.5rem 0;
         }}
         .login-box input {{
             width: 100%;
@@ -73,15 +80,16 @@ def show():
             padding: 0.75rem;
             border: none;
             border-radius: 5px;
+            background-color: #1E1E1E;
+            color: white;
         }}
         .login-button {{
             background-color: #A2DD84;
             color: black;
             padding: 0.75rem;
             text-align: center;
-            font-weight: bold;
+            font-weight: 300;
             border-radius: 5px;
-            cursor: pointer;
         }}
         .forgot-password {{
             text-align: right;
@@ -101,13 +109,28 @@ def show():
             display: block;
             margin-bottom: 0.5rem;
         }}
+        .register-section {{
+            margin-top: 1rem;
+            font-size: 0.85rem;
+            text-align: center;
+        }}
+        .register-section span {{
+            color: #868686;
+            font-weight: 300;
+        }}
+        .register-section a {{
+            color: white;
+            font-weight: 500;
+            text-decoration: none;
+            margin-left: 4px;
+        }}
         </style>
     """, unsafe_allow_html=True)
 
     st.markdown(f"""
     <div class="full-page">
         <div class="login-left">
-            <img src="data:image/png;base64,{logo_image}" alt="Delta Logo">
+            <img src="data:image/png;base64,{logo_image}" class="logo" alt="Delta Logo">
         </div>
         <div class="login-right">
             <div class="login-box">
@@ -120,8 +143,9 @@ def show():
                     <div class="forgot-password">Forgot password?</div>
                     <div class="login-button">Connect</div>
                 </form>
-                <div style="margin-top: 1rem; font-size: 0.85rem;">
-                    Don’t have an account? <a href="#">Register</a>
+                <div class="register-section">
+                    <span>Don’t have an account?</span>
+                    <a href="#">Register</a>
                 </div>
                 <div class="tools">
                     <a href="#">Diagnostic tools</a>
