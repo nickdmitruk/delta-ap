@@ -1,22 +1,40 @@
 import streamlit as st
-from app.components import auth
+import json
+import os
+import hashlib
+from streamlit.runtime.scriptrunner import get_script_run_ctx, RerunException
+
+def rerun():
+    raise RerunException(get_script_run_ctx())
+
+def load_users():
+    if not os.path.exists("users.json"):
+        return {}
+    with open("users.json", "r") as file:
+        return json.load(file)
+
+def verify_user(email, password):
+    users = load_users()
+    hashed_password = hashlib.sha256(password.encode()).hexdigest()
+    return email in users and users[email] == hashed_password
 
 def show():
-    st.markdown("### 🔐 Login to DELTA A.P.")
+    st.markdown("## 🔐 Login to DELTA A.P.")
 
-    with st.form("login_form"):
-        email = st.text_input("Email")
-        password = st.text_input("Пароль", type="password")
-        login_btn = st.form_submit_button("Connect")
+    email = st.text_input("Email")
+    password = st.text_input("Пароль", type="password")
 
-        if login_btn:
-            if auth.login(email, password):
-                st.success("Добро пожаловать в DELTA A.P.")
-                st.session_state["logged_in"] = True
-                st.session_state["user_email"] = email
-                st.session_state["page"] = "Home page"
-                st.experimental_rerun()
-            else:
-                st.error("Неверный email или пароль")
+    if st.button("Connect"):
+        if verify_user(email, password):
+            st.session_state["logged_in"] = True
+            st.session_state["page"] = "Home page"
+            st.success("Успешный вход")
+            rerun()
+        else:
+            st.error("Неверный email или пароль")
 
-    st.markdown("Нет аккаунта? [Зарегистрироваться](#register)")
+    st.markdown("---")
+    st.write("Нет аккаунта?")
+    if st.button("Зарегистрироваться"):
+        st.session_state["page"] = "Register"
+        rerun()

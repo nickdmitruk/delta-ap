@@ -1,18 +1,33 @@
-# Byte-compiled / optimized / DLL files
+# Python
 __pycache__/
 *.py[cod]
-*$py.class
+*.pyo
+*.pyd
 
-# Virtual environment
-venv/
+# Virtualenv
 .venv/
 env/
+venv/
 
 # macOS
 .DS_Store
 
-# Streamlit cache
-.streamlit/
-
-# VSCode
+# IDE
 .vscode/
+.idea/
+
+# Auth / Config
+.env
+secrets.toml
+*.key
+*.pem
+
+# Data
+*.csv
+*.xlsx
+*.bak
+*.tmp
+debug.log
+
+# Users
+users.json
