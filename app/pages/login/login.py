@@ -3,8 +3,7 @@ import os
 import base64
 from app.core.auth import login_user
 
-st.set_page_config(page_title="Login | DELTA A.P.", layout="wide")
-
+# Подгрузка изображений в base64
 def get_base64_image(path):
     with open(path, "rb") as f:
         data = f.read()
@@ -17,6 +16,10 @@ def show():
 
     st.markdown(f"""
         <style>
+        /* Убираем верхнее меню Streamlit */
+        header {{visibility: hidden;}}
+        footer {{visibility: hidden;}}
+
         html, body, [data-testid="stApp"], .main, .block-container {{
             margin: 0;
             padding: 0;
@@ -32,9 +35,9 @@ def show():
             background-color: #262626;
         }}
         .login-left {{
-            width: 60%;
+            width: 52%;
             height: calc(100vh - 100px);
-            margin: 35px 0 35px 35px;
+            margin: 50px 0 50px 50px;
             border-radius: 24px;
             background-image: url("data:image/jpg;base64,{bg_image}");
             background-size: cover;
@@ -90,6 +93,7 @@ def show():
             text-align: center;
             font-weight: 300;
             border-radius: 5px;
+            cursor: pointer;
         }}
         .forgot-password {{
             text-align: right;

@@ -1,9 +1,12 @@
 import sys
 import os
-st.set_page_config(page_title="DELTA A.P.", layout="wide")
-sys.path.append(os.path.abspath("app"))
-
 import streamlit as st
+
+# Сначала стримлит
+st.set_page_config(page_title="DELTA A.P.", layout="wide")
+
+# Потом доп. пути
+sys.path.append(os.path.abspath("app"))
 
 # Импорт страниц
 from app.pages.login import login
@@ -18,9 +21,6 @@ from app.pages.settings.settings import show as show_settings
 
 # Импорт бокового меню
 from app.components import sidebar
-
-# Настройка страницы
-st.set_page_config(page_title="DELTA A.P.", layout="wide")
 
 # Инициализация session_state
 if "logged_in" not in st.session_state:
@@ -52,4 +52,3 @@ else:
         show_portfolio()
     elif page == "Settings":
         show_settings()
-
