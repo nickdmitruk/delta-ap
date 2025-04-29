@@ -1,162 +1,108 @@
 import streamlit as st
-import os
-import base64
-from app.core.auth import login_user
+from app.pages.login.login_buttons import (
+    connect_button,
+    register_button,
+    diagnostic_tools_button,
+    reserved_settings_button,
+    update_channels_button,
+)
 
-# Подгрузка изображений в base64
-def get_base64_image(path):
-    with open(path, "rb") as f:
-        data = f.read()
-    return base64.b64encode(data).decode()
+# Настройки страницы — обязательно в самом начале!
+st.set_page_config(page_title="Login | DELTA A.P.", layout="wide")
 
-def show():
-    bg_image = get_base64_image("app/assets/images/login_background.jpg")
-    logo_image = get_base64_image("app/assets/logos/delta_main_logo.png")
-    icon_image = get_base64_image("app/assets/icons/login_icon.png")
+# Убираем меню и футер Streamlit
+hide_streamlit_style = """
+    <style>
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    header {visibility: hidden;}
+    </style>
+"""
+st.markdown(hide_streamlit_style, unsafe_allow_html=True)
 
-    st.markdown(f"""
-        <style>
-        /* Убираем верхнее меню Streamlit */
-        header {{visibility: hidden;}}
-        footer {{visibility: hidden;}}
-
-        html, body, [data-testid="stApp"], .main, .block-container {{
+# Основной CSS и структура
+st.markdown("""
+    <style>
+        html, body, [data-testid="stApp"] {
+            height: 100%;
             margin: 0;
-            padding: 0;
-            height: 100vh;
-            width: 100vw;
+            background-color: #262626;
             overflow: hidden;
-            font-family: 'Gotham', sans-serif;
-        }}
-        .full-page {{
+        }
+        .container {
             display: flex;
             height: 100vh;
             width: 100vw;
-            background-color: #262626;
-        }}
-        .login-left {{
-            width: 52%;
-            height: calc(100vh - 100px);
-            margin: 50px 0 50px 50px;
-            border-radius: 24px;
-            background-image: url("data:image/jpg;base64,{bg_image}");
-            background-size: cover;
-            background-position: center;
-            position: relative;
-            overflow: hidden;
-        }}
-        .login-left img.logo {{
-            position: absolute;
-            top: 30px;
-            left: 30px;
-            width: 120px;
-        }}
-        .login-right {{
+        }
+        .left-side {
             flex: 1;
-            background-color: #262626;
+            padding: 50px;
+        }
+        .right-side {
+            flex: 1;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            padding: 2rem;
-        }}
-        .login-box {{
-            width: 100%;
-            max-width: 400px;
+            align-items: center;
             color: white;
-            text-align: left;
-            margin: 0 auto;
-        }}
-        .login-box h1 {{
-            font-size: 2rem;
-            font-weight: 500;
-            margin: 0.25rem 0;
-        }}
-        .login-box p {{
-            font-weight: 300;
-            font-size: 0.95rem;
-            color: #868686;
-            margin: 0 0 1.5rem 0;
-        }}
-        .login-box input {{
-            width: 100%;
-            margin-bottom: 1rem;
-            padding: 0.75rem;
+        }
+        .input {
+            width: 300px;
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: #1E1E1E;
+            border: none;
+            color: white;
+            font-size: 16px;
+            border-radius: 5px;
+        }
+        .button {
+            width: 300px;
+            background-color: #A2DD84;
+            padding: 10px;
+            font-size: 16px;
             border: none;
             border-radius: 5px;
-            background-color: #1E1E1E;
-            color: white;
-        }}
-        .login-button {{
-            background-color: #A2DD84;
-            color: black;
-            padding: 0.75rem;
-            text-align: center;
-            font-weight: 300;
-            border-radius: 5px;
+            margin-top: 10px;
             cursor: pointer;
-        }}
-        .forgot-password {{
-            text-align: right;
-            color: #A2DD84;
-            font-size: 0.9rem;
-            margin-top: -0.5rem;
-            margin-bottom: 1rem;
-        }}
-        .tools {{
-            text-align: left;
-            margin-top: 3rem;
-            font-size: 0.85rem;
-        }}
-        .tools a {{
-            color: white;
-            text-decoration: underline;
-            display: block;
-            margin-bottom: 0.5rem;
-        }}
-        .register-section {{
-            margin-top: 1rem;
-            font-size: 0.85rem;
-            text-align: center;
-        }}
-        .register-section span {{
+        }
+        .small-links {
+            font-size: 13px;
             color: #868686;
-            font-weight: 300;
-        }}
-        .register-section a {{
-            color: white;
-            font-weight: 500;
-            text-decoration: none;
-            margin-left: 4px;
-        }}
-        </style>
-    """, unsafe_allow_html=True)
+            margin-top: 10px;
+        }
+    </style>
+""", unsafe_allow_html=True)
 
-    st.markdown(f"""
-    <div class="full-page">
-        <div class="login-left">
-            <img src="data:image/png;base64,{logo_image}" class="logo" alt="Delta Logo">
+st.markdown("""
+    <div class="container">
+        <div class="left-side">
+            <img src="app/assets/logos/delta_main_logo.png" width="120"/>
+            <img src="app/assets/images/login_background.jpg" width="100%" style="border-radius: 20px; margin-top: 20px;"/>
         </div>
-        <div class="login-right">
-            <div class="login-box">
-                <img src="data:image/png;base64,{icon_image}" width="48">
-                <h1>Login to Delta</h1>
-                <p>Sign in to get access to your dashboard</p>
-                <form action="#" method="post">
-                    <input type="text" name="email" placeholder="Email or account ID">
-                    <input type="password" name="password" placeholder="Password">
-                    <div class="forgot-password">Forgot password?</div>
-                    <div class="login-button">Connect</div>
-                </form>
-                <div class="register-section">
-                    <span>Don’t have an account?</span>
-                    <a href="#">Register</a>
-                </div>
-                <div class="tools">
-                    <a href="#">Diagnostic tools</a>
-                    <a href="#">Reserved settings</a>
-                    <a href="#">Update channels</a>
-                </div>
-            </div>
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
+        <div class="right-side">
+            <img src="app/assets/icons/login_icon.png" width="48"/>
+            <h1 style="font-family: Gotham Medium;">Login to Delta</h1>
+            <p style="color: #868686;">Sign in to get access to your dashboard</p>
+""", unsafe_allow_html=True)
+
+# Поля логина
+email = st.text_input("Email or account ID", key="email_input")
+password = st.text_input("Password", type="password", key="password_input")
+
+# Кнопка Connect
+connect_button(email, password)
+
+# Register
+register_button()
+
+# Ссылки внизу
+st.markdown("""
+    <div style="text-align: left; font-size: 13px; margin-top: 30px;">
+""", unsafe_allow_html=True)
+
+diagnostic_tools_button()
+reserved_settings_button()
+update_channels_button()
+
+st.markdown("</div></div></div>", unsafe_allow_html=True)
